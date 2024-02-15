@@ -140,19 +140,19 @@ contract DeployL2BridgeContracts is Script {
         logAddress("L2_SCROLL_MESSENGER_IMPLEMENTATION_ADDR", address(impl));
     }
 
-    function deployL2GatewayRouter() internal {
-        L2GatewayRouter impl = new L2GatewayRouter();
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(impl),
-            address(proxyAdmin),
-            new bytes(0)
-        );
+   function deployL2GatewayRouter() internal {
+    L2GatewayRouter impl = new L2GatewayRouter();
+    TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
+        address(impl),
+        address(proxyAdmin),
+        abi.encodeWithSignature("initialize()")
+    );
 
-        logAddress("L2_GATEWAY_ROUTER_IMPLEMENTATION_ADDR", address(impl));
-        logAddress("L2_GATEWAY_ROUTER_PROXY_ADDR", address(proxy));
+    logAddress("L2_GATEWAY_ROUTER_IMPLEMENTATION_ADDR", address(impl));
+    logAddress("L2_GATEWAY_ROUTER_PROXY_ADDR", address(proxy));
 
-        router = L2GatewayRouter(address(proxy));
-    }
+    router = L2GatewayRouter(address(proxy));
+}
 
     function deployScrollStandardERC20Factory() internal {
         ScrollStandardERC20 tokenImpl = new ScrollStandardERC20();
@@ -216,7 +216,7 @@ contract DeployL2BridgeContracts is Script {
         logAddress("L2_ERC1155_GATEWAY_IMPLEMENTATION_ADDR", address(impl));
     }
 
-    function logAddress(string memory name, address addr) internal view {
-        console.log(string(abi.encodePacked(name, "=", vm.toString(address(addr)))));
+   function logAddress(string memory name, address addr) internal {
+    console.log(string(abi.encodePacked(name, "=", vm.toString(address(addr)))));
     }
 }
